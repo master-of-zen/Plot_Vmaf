@@ -1,3 +1,4 @@
+![](https://github.com/master-of-zen/Plot_Vmaf/blob/master/fig.png)
 # Plot_Vmaf
 Simple script for vmaf plot.
 Output saved as high resolution image
