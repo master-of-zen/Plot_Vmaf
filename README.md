@@ -9,3 +9,4 @@ Output saved as high resolution image
 ## Requirements
 Python 3
 Matplotlib
+Numpy
