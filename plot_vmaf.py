@@ -20,7 +20,7 @@ def plot_vmaf(vmafs):
                                 f'1%: {perc_1}  25%: {perc_25}  75%: {perc_75}', linewidth=0.7)
     plt.ylabel('VMAF')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True)
-    plt.ylim(min(vmafs), 100)
+    plt.ylim(int(perc_1), 100)
     plt.tight_layout()
     plt.margins(0)
 
