@@ -14,8 +14,7 @@ python plot_vmaf.py vmaf.xml -o plot.svg
 
 ## Options
 ```
-Optional Arguments:
-    -o/--output ["file"]    Graph output file, file extension will change type of output (default plot.png)
+-o --output ["file"]    Graph output file, file extension will change type of output (default plot.png)
 ```
 
 ## Requirements
