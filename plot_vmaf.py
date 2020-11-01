@@ -3,6 +3,7 @@
 import sys, argparse
 import numpy as np
 import matplotlib.pyplot as plt
+from math import log10
 
 def plot_vmaf(vmafs):
     # Create datapoints
