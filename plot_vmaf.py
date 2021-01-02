@@ -15,6 +15,7 @@ def read_json(file):
 def plot_multi_vmaf(vmafs,vmaf_file_names):
     # Create datapoints
     i=0
+    ymin=100
     for vmaf in vmafs:
         x = [x for x in range(len(vmaf))]
         plot_size = len(vmaf)
@@ -23,15 +24,21 @@ def plot_multi_vmaf(vmafs,vmaf_file_names):
         perc_1 = round(np.percentile(vmaf, 1), 3)
         perc_25 = round(np.percentile(vmaf, 25), 3)
         perc_75 = round(np.percentile(vmaf, 75), 3)
-        plt.plot(x, vmaf, label=f'{vmaf_file_names[i]}\n' 
+        if ymin>perc_1:
+            ymin=perc_1
+
+        plt.plot(x, vmaf, label=f'File: {vmaf_file_names[i]}\n' 
                                 f'Frames: {len(vmaf)} Mean:{amean} - Harmonic Mean:{hmean}\n'
                                 f'1%: {perc_1}  25%: {perc_25}  75%: {perc_75}', linewidth=0.7)
         plt.plot([1, plot_size], [amean, amean], ':')
         plt.annotate(f'Mean: {amean}', xy=(0, amean))
         i=i+1
+    if ymin>80:
+        ymin=80
+
     plt.ylabel('VMAF')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True)
-    plt.ylim(20, 100)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, fontsize='x-small')
+    plt.ylim(int(ymin), 100)
     plt.tight_layout()
     plt.margins(0)
 
