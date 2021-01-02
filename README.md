@@ -9,7 +9,7 @@ python plot_vmaf.py [-h] [-o OUTPUT] vmaf_file
 
 ## Example
 ```bash
-python plot_vmaf.py vmaf.xml -o plot.svg
+python plot_vmaf.py vmaf.json -o plot.svg
 ```
 
 ## Options
