@@ -1,6 +1,6 @@
 # Plot_Vmaf
-Simple script for vmaf plotting.  
-![](plot.svg)
+Simple script for vmaf plotting.
+![](plot.png)
 
 ## Usage
 ```bash
@@ -18,6 +18,6 @@ python plot_vmaf.py vmaf.xml -o plot.svg
 ```
 
 ## Requirements
-Python 3  
-Matplotlib  
-Numpy  
+Python 3
+Matplotlib
+Numpy
