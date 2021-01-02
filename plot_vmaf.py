@@ -13,35 +13,41 @@ def read_json(file):
 
 def plot_multi_vmaf(vmafs,vmaf_file_names):
     # Create datapoints
-    x = [x for x in range(len(vmafs))]
-    mean = round(sum(vmafs) / len(vmafs), 3)
-    plot_size = len(vmafs)
-    perc_1 = round(np.percentile(vmafs, 1), 3)
-    perc_25 = round(np.percentile(vmafs, 25), 3)
-    perc_75 = round(np.percentile(vmafs, 75), 3)
+    i=0
+    for vmaf in vmafs:
+        x = [x for x in range(len(vmaf))]
+        plot_size = len(vmaf)
+        mean = round(sum(vmaf) / len(vmaf), 2)
+        plt.plot(x, vmaf, label=f'Frames: {len(vmaf)} Mean:{mean} - {vmaf_file_names[i]}', linewidth=0.7)
+        plt.plot([1, plot_size], [mean, mean], ':')
+        plt.annotate(f'Mean: {mean}', xy=(0, mean))
+        i=i+1
+    # perc_1 = round(np.percentile(vmafs, 1), 3)
+    # perc_25 = round(np.percentile(vmafs, 25), 3)
+    # perc_75 = round(np.percentile(vmafs, 75), 3)
 
-    # Plot
-    figure_width = 3 + round((4 * log10(plot_size)))
-    plt.figure(figsize=(figure_width, 5))
-    [plt.axhline(i, color='grey', linewidth=0.4) for i in range(0, 100)]
-    [plt.axhline(i, color='black', linewidth=0.6) for i in range(0, 100, 5)]
-    plt.plot(x, vmafs, label=f'Frames: {len(vmafs)} Mean:{mean}\n'
-                                f'1%: {perc_1}  25%: {perc_25}  75%: {perc_75}', linewidth=0.7)
+    # # Plot
+    # figure_width = 3 + round((4 * log10(plot_size)))
+    # plt.figure(figsize=(figure_width, 5))
+    # [plt.axhline(i, color='grey', linewidth=0.4) for i in range(0, 100)]
+    # [plt.axhline(i, color='black', linewidth=0.6) for i in range(0, 100, 5)]
+    # plt.plot(x, vmafs, label=f'Frames: {len(vmafs)} Mean:{mean}\n'
+    #                             f'1%: {perc_1}  25%: {perc_25}  75%: {perc_75}', linewidth=0.7)
 
-    plt.plot([1, plot_size], [perc_1, perc_1], '-', color='red')
-    plt.annotate(f'1%: {perc_1}', xy=(0, perc_1), color='red')
+    # plt.plot([1, plot_size], [perc_1, perc_1], '-', color='red')
+    # plt.annotate(f'1%: {perc_1}', xy=(0, perc_1), color='red')
 
-    plt.plot([1, plot_size], [perc_25, perc_25], ':', color='orange')
-    plt.annotate(f'25%: {perc_25}', xy=(0, perc_25), color='orange')
+    # plt.plot([1, plot_size], [perc_25, perc_25], ':', color='orange')
+    # plt.annotate(f'25%: {perc_25}', xy=(0, perc_25), color='orange')
 
-    plt.plot([1, plot_size], [perc_75, perc_75], ':', color='green')
-    plt.annotate(f'75%: {perc_75}', xy=(0, perc_75), color='green')
+    # plt.plot([1, plot_size], [perc_75, perc_75], ':', color='green')
+    # plt.annotate(f'75%: {perc_75}', xy=(0, perc_75), color='green')
 
-    plt.plot([1, plot_size], [mean, mean], ':', color='black')
-    plt.annotate(f'Mean: {mean}', xy=(0, mean), color='black')
+    # plt.plot([1, plot_size], [mean, mean], ':', color='black')
+    # plt.annotate(f'Mean: {mean}', xy=(0, mean), color='black')
     plt.ylabel('VMAF')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True)
-    plt.ylim(int(perc_1), 100)
+    plt.ylim(20, 100)
     plt.tight_layout()
     plt.margins(0)
 
