@@ -12,8 +12,42 @@ def read_json(file):
         fl = json.load(f)
         return fl
 
+
+def plot_percentile_vmaf(vmafs,vmaf_file_names):
+    # Create datapoints
+    i=0
+    plt.figure(2) 
+    fig, ax = plt.subplots()
+    x = [1,5,25,50,75]
+    ymin=100
+    for vmaf in vmafs:
+        perc_1 = round(np.percentile(vmaf, 1), 2)
+        perc_5 = round(np.percentile(vmaf, 5), 2)
+        perc_25 = round(np.percentile(vmaf, 25), 2)
+        perc_50 = round(np.percentile(vmaf, 50), 2)
+        perc_75 = round(np.percentile(vmaf, 75), 2)
+        if ymin>perc_1:
+            ymin=perc_1
+        y=[perc_1,perc_5,perc_25,perc_50,perc_75]
+        plt.plot(x, y,'-*', label=f'File: {vmaf_file_names[i]}\n' 
+                                f'1%: {perc_1} 5%: {perc_5} 25%: {perc_25}  50%: {perc_50} 75%: {perc_75}', linewidth=0.7)
+        i=i+1
+    
+    ax.set_xticks(x)
+    ax.set_xticklabels(x)
+    ax.set_ylim([ymin,100])
+    ax.grid(True)    
+    ax.set_ylabel('VMAF')
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, fontsize='x-small')
+    plt.tight_layout()
+    plt.margins(0)
+
+    # Save
+    plt.savefig("histo_"+args.output, dpi=500)
+
 def plot_multi_vmaf(vmafs,vmaf_file_names):
     # Create datapoints
+    plt.figure(1) 
     i=0
     ymin=100
     for vmaf in vmafs:
@@ -95,12 +129,14 @@ def main():
         plot_vmaf(vmafs[0])
     else:
         plot_multi_vmaf(vmafs,vmaf_file_names)
-    
+    if args.per==True:
+        plot_percentile_vmaf(vmafs,vmaf_file_names)
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Plot vmaf to graph')
     parser.add_argument('vmaf_file', type=str,nargs='+', help='Vmaf log file')
     parser.add_argument('-o','--output', dest='output', type=str, default='plot.png', help='Graph output filename (default plot.png)')
+    parser.add_argument('-per', help='Plot percentile', action='store_true')
 
     return(parser.parse_args())
 
