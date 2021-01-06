@@ -37,7 +37,7 @@ def plot_percentile_vmaf(vmafs,vmaf_file_names):
 
     ax.set_xticks(x)
     ax.set_xticklabels(x)
-    ax.set_ylabel('PERCENTILE')
+    #ax.set_xlabel('PERCENTILE')
     ax.set_ylim([ymin,100])
     ax.set_ylabel('VMAF')
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, fontsize='x-small')
@@ -77,7 +77,7 @@ def plot_multi_vmaf(vmafs,vmaf_file_names):
         ymin=80
 
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, fontsize='x-small')
-    plt.xlabel('FRAMES')
+    #plt.xlabel('FRAMES')
     plt.ylabel('VMAF')
     plt.ylim(int(ymin), 100)
     plt.tight_layout()
