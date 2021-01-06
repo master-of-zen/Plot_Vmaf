@@ -14,10 +14,11 @@ def read_json(file):
 
 
 def plot_percentile_vmaf(vmafs,vmaf_file_names):
+    plt.figure(2)
+    fig, ax = plt.subplots()
+    
     # Create datapoints
     i=0
-    plt.figure(2) 
-    fig, ax = plt.subplots()
     x = [1,5,25,50,75]
     ymin=100
     for vmaf in vmafs:
@@ -33,12 +34,14 @@ def plot_percentile_vmaf(vmafs,vmaf_file_names):
                                 f'1%: {perc_1} 5%: {perc_5} 25%: {perc_25}  50%: {perc_50} 75%: {perc_75}', linewidth=0.7)
         i=i+1
     
+
     ax.set_xticks(x)
     ax.set_xticklabels(x)
+    ax.set_ylabel('PERCENTILE')
     ax.set_ylim([ymin,100])
-    ax.grid(True)    
     ax.set_ylabel('VMAF')
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, fontsize='x-small')
+    ax.grid(True)    
     plt.tight_layout()
     plt.margins(0)
 
@@ -47,8 +50,9 @@ def plot_percentile_vmaf(vmafs,vmaf_file_names):
     plt.savefig(fileName+"_histo"+fileExtension, dpi=500)
 
 def plot_multi_vmaf(vmafs,vmaf_file_names):
+    plt.figure(1)
+    
     # Create datapoints
-    plt.figure(1) 
     i=0
     ymin=100
     for vmaf in vmafs:
@@ -68,11 +72,13 @@ def plot_multi_vmaf(vmafs,vmaf_file_names):
         plt.plot([1, plot_size], [amean, amean], ':')
         plt.annotate(f'Mean: {amean}', xy=(0, amean))
         i=i+1
+    
     if ymin>80:
         ymin=80
 
-    plt.ylabel('VMAF')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, fontsize='x-small')
+    plt.xlabel('FRAMES')
+    plt.ylabel('VMAF')
     plt.ylim(int(ymin), 100)
     plt.tight_layout()
     plt.margins(0)
