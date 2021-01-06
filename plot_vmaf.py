@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, argparse
+import sys, argparse, os
 import numpy as np
 import matplotlib.pyplot as plt
 import json
@@ -43,7 +43,8 @@ def plot_percentile_vmaf(vmafs,vmaf_file_names):
     plt.margins(0)
 
     # Save
-    plt.savefig("histo_"+args.output, dpi=500)
+    fileName, fileExtension = os.path.splitext(args.output)
+    plt.savefig(fileName+"_histo"+fileExtension, dpi=500)
 
 def plot_multi_vmaf(vmafs,vmaf_file_names):
     # Create datapoints
@@ -129,14 +130,15 @@ def main():
         plot_vmaf(vmafs[0])
     else:
         plot_multi_vmaf(vmafs,vmaf_file_names)
-    if args.per==True:
+    
+    if args.percent==True:
         plot_percentile_vmaf(vmafs,vmaf_file_names)
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Plot vmaf to graph')
     parser.add_argument('vmaf_file', type=str,nargs='+', help='Vmaf log file')
     parser.add_argument('-o','--output', dest='output', type=str, default='plot.png', help='Graph output filename (default plot.png)')
-    parser.add_argument('-per', help='Plot percentile', action='store_true')
+    parser.add_argument('-p','--percent', help='Plot percentile', action='store_true')
 
     return(parser.parse_args())
 
