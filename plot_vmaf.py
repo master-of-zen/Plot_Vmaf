@@ -21,9 +21,9 @@ def plot_multi_vmaf(vmafs,vmaf_file_names):
         plot_size = len(vmaf)
         hmean=round(harmonic_mean(vmaf),2)
         amean=round(mean(vmaf),2)
-        perc_1 = round(np.percentile(vmaf, 1), 3)
-        perc_25 = round(np.percentile(vmaf, 25), 3)
-        perc_75 = round(np.percentile(vmaf, 75), 3)
+        perc_1 = round(np.percentile(sorted(vmaf), 1), 3)
+        perc_25 = round(np.percentile(sorted(vmaf), 25), 3)
+        perc_75 = round(np.percentile(sorted(vmaf), 75), 3)
         if ymin>perc_1:
             ymin=perc_1
 
