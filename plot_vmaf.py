@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import json
 from math import log10
 from statistics import mean, harmonic_mean
+from os.path import basename
+
+
 
 def read_json(file):
     with open(file, 'r') as f:
@@ -29,8 +32,12 @@ def plot_percentile_vmaf(vmafs,vmaf_file_names):
         perc_75 = round(np.percentile(vmaf, 75), 2)
         if ymin>perc_1:
             ymin=perc_1
+        hmean=round(harmonic_mean(vmaf),2)
+        amean=round(mean(vmaf),2)    
         y=[perc_1,perc_5,perc_25,perc_50,perc_75]
-        plt.plot(x, y,'-*', label=f'File: {vmaf_file_names[i]}\n' 
+        plotName=basename(vmaf_file_names[i])
+        plt.plot(x, y,'-*', label=f'File: {plotName}\n'
+                                f'Mean: {amean} - HMean:{hmean}\n'  
                                 f'1%: {perc_1} 5%: {perc_5} 25%: {perc_25}  50%: {perc_50} 75%: {perc_75}', linewidth=0.7)
         i=i+1
     
@@ -65,8 +72,8 @@ def plot_multi_vmaf(vmafs,vmaf_file_names):
         perc_75 = round(np.percentile(vmaf, 75), 3)
         if ymin>perc_1:
             ymin=perc_1
-
-        plt.plot(x, vmaf, label=f'File: {vmaf_file_names[i]}\n' 
+        plotName=basename(vmaf_file_names[i])
+        plt.plot(x, vmaf, label=f'File: {plotName}\n' 
                                 f'Frames: {len(vmaf)} Mean:{amean} - Harmonic Mean:{hmean}\n'
                                 f'1%: {perc_1}  25%: {perc_25}  75%: {perc_75}', linewidth=0.7)
         plt.plot([1, plot_size], [amean, amean], ':')
