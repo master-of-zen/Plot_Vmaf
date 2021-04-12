@@ -64,15 +64,26 @@ def plot_metric(scores, metric):
 
     plot_size = len(scores)
 
+    # get percentiles
     perc_1 = round(np.percentile(scores, 1), 3)
     perc_25 = round(np.percentile(scores, 25), 3)
     perc_75 = round(np.percentile(scores, 75), 3)
 
     # Plot
     figure_width = 3 + round((4 * log10(plot_size)))
+
     plt.figure(figsize=(figure_width, 5))
+
+    if metric == "SSIM":
+        [plt.axhline(i/100, color='grey', linewidth=0.4)
+         for i in range(0, 100)]
+        [plt.axhline(i/100, color='black', linewidth=0.6)
+         for i in range(0, 100, 5)]
+    else:
     [plt.axhline(i, color='grey', linewidth=0.4) for i in range(0, 100)]
-    [plt.axhline(i, color='black', linewidth=0.6) for i in range(0, 100, 5)]
+        [plt.axhline(i, color='black', linewidth=0.6)
+         for i in range(0, 100, 5)]
+
     plt.plot(x,
              scores,
              label=f'Frames: {len(scores)} Mean:{mean}\n'
