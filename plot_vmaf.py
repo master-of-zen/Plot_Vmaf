@@ -90,6 +90,7 @@ def plot_metric(scores, metric):
 
     plt.plot([1, plot_size], [mean, mean], ':', color='black')
     plt.annotate(f'Mean: {mean}', xy=(0, mean), color='black')
+    plt.title(metric)
     plt.ylabel(metric)
     plt.legend(loc='upper center',
                bbox_to_anchor=(0.5, -0.05),
