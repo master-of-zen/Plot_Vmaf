@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import sys, argparse
+import sys
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import json
@@ -14,10 +15,10 @@ def read_json(file):
         return fl
 
 
-def plot_multi_vmaf(vmafs, vmaf_file_names):
+def plot_multi_metrics(scores, vmaf_file_names):
     i = 0
     ymin = 100
-    for vmaf in vmafs:
+    for vmaf in scores:
         x = [x for x in range(len(vmaf))]
         plot_size = len(vmaf)
         hmean = round(harmonic_mean(vmaf), 2)
@@ -55,13 +56,17 @@ def plot_multi_vmaf(vmafs, vmaf_file_names):
     plt.savefig(args.output, dpi=500)
 
 
-def plot_vmaf(vmafs):
-    x = [x for x in range(len(vmafs))]
-    mean = round(sum(vmafs) / len(vmafs), 3)
-    plot_size = len(vmafs)
-    perc_1 = round(np.percentile(vmafs, 1), 3)
-    perc_25 = round(np.percentile(vmafs, 25), 3)
-    perc_75 = round(np.percentile(vmafs, 75), 3)
+def plot_metric(scores, metric):
+
+    x = [x for x in range(len(scores))]
+
+    mean = round(sum(scores) / len(scores), 3)
+
+    plot_size = len(scores)
+
+    perc_1 = round(np.percentile(scores, 1), 3)
+    perc_25 = round(np.percentile(scores, 25), 3)
+    perc_75 = round(np.percentile(scores, 75), 3)
 
     # Plot
     figure_width = 3 + round((4 * log10(plot_size)))
@@ -69,8 +74,8 @@ def plot_vmaf(vmafs):
     [plt.axhline(i, color='grey', linewidth=0.4) for i in range(0, 100)]
     [plt.axhline(i, color='black', linewidth=0.6) for i in range(0, 100, 5)]
     plt.plot(x,
-             vmafs,
-             label=f'Frames: {len(vmafs)} Mean:{mean}\n'
+             scores,
+             label=f'Frames: {len(scores)} Mean:{mean}\n'
              f'1%: {perc_1}  25%: {perc_25}  75%: {perc_75}',
              linewidth=0.7)
 
@@ -85,12 +90,23 @@ def plot_vmaf(vmafs):
 
     plt.plot([1, plot_size], [mean, mean], ':', color='black')
     plt.annotate(f'Mean: {mean}', xy=(0, mean), color='black')
-    plt.ylabel('VMAF')
+    plt.ylabel(metric)
     plt.legend(loc='upper center',
                bbox_to_anchor=(0.5, -0.05),
                fancybox=True,
                shadow=True)
-    plt.ylim(int(perc_1), 100)
+
+    if metric == "VMAF":
+        top_y = 100
+    else:
+        top_y = max(scores)
+
+    if metric in ("VMAF", "PSNR"):
+        bottom_y = int(perc_1)
+    else:
+        bottom_y = perc_1
+
+    plt.ylim(bottom_y, top_y)
     plt.tight_layout()
     plt.margins(0)
 
@@ -99,18 +115,19 @@ def plot_vmaf(vmafs):
 
 
 def main():
-    vmafs = []
+    to_plot = []
     vmaf_file_names = []
-    for f in args.vmaf_file:
-        jsn = read_json(f)
-        temp_vmafs = [x['metrics']['vmaf'] for x in jsn['frames']]
-        vmafs.append(temp_vmafs)
-        vmaf_file_names.append(f)
+    for metric in args.metrics:
+        for f in args.vmaf_file:
+            jsn = read_json(f)
+            temp_scores = [x['metrics'][metric.lower()] for x in jsn['frames']]
+            to_plot.append(temp_scores)
+            vmaf_file_names.append(f)
 
-    if len(vmafs) == 1:
-        plot_vmaf(vmafs[0])
-    else:
-        plot_multi_vmaf(vmafs, vmaf_file_names)
+        if len(args.metrics) == 1:
+            plot_metric(to_plot[0], metric)
+        else:
+            plot_multi_metrics(metric, vmaf_file_names)
 
 
 def parse_arguments():
@@ -122,6 +139,9 @@ def parse_arguments():
                         type=str,
                         default='plot.png',
                         help='Graph output filename (default plot.png)')
+    parser.add_argument('-m', '--metrics',
+                        default=['VMAF'], help='what metrics to plot', type=str, nargs='+',
+                        choices=['VMAF', 'PSNR', 'SSIM'])
 
     return (parser.parse_args())
 
