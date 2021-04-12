@@ -80,7 +80,7 @@ def plot_metric(scores, metric):
         [plt.axhline(i/100, color='black', linewidth=0.6)
          for i in range(0, 100, 5)]
     else:
-    [plt.axhline(i, color='grey', linewidth=0.4) for i in range(0, 100)]
+        [plt.axhline(i, color='grey', linewidth=0.4) for i in range(0, 100)]
         [plt.axhline(i, color='black', linewidth=0.6)
          for i in range(0, 100, 5)]
 
