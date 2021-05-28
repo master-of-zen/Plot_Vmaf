@@ -8,8 +8,6 @@ import json
 from math import log10
 from statistics import mean, harmonic_mean
 
-# TODO: rust rewrite?:)
-
 
 def read_json(file):
     with open(file, "r") as f:
